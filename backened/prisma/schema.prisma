@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+// Users table
+model User {
+  id        Int       @id @default(autoincrement())
+  username  String    @unique
+  email     String    @unique
+  password  String
+  messages  Message[] // One-to-Many: user can send many messages
+  rooms     Room[]    @relation("UserRooms" ) // Many-to-Many: user can join many rooms
+  reactions Reaction[] // One-to-Many: reactions by the user
+  createdAt DateTime  @default(now())
+}
+
+// Chat Rooms table
+model Room {
+  id        Int       @id @default(autoincrement())
+  name      String
+  messages  Message[] // One-to-Many: room can have many messages
+  users     User[]    @relation("UserRooms") // Many-to-Many: users in this room
+  createdAt DateTime  @default(now())
+}
+
+// Messages table
+model Message {
+  id        Int       @id @default(autoincrement())
+  content   String
+  userId    Int
+  roomId    Int
+  user      User      @relation(fields: [userId], references: [id])
+  room      Room      @relation(fields: [roomId], references: [id])
+  reactions Reaction[] // One-to-Many: message can have many reactions
+  createdAt DateTime  @default(now())
+}
+
+// Reactions table (e.g., 👍, ❤️)
+model Reaction {
+  id        Int       @id @default(autoincrement())
+  type      String    // e.g., "like", "love", "haha"
+  userId    Int
+  messageId Int
+  user      User      @relation(fields: [userId], references: [id])
+  message   Message   @relation(fields: [messageId], references: [id])
+  createdAt DateTime  @default(now())
+}
