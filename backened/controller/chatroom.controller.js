@@ -19,3 +19,28 @@ export const createChatRoomController = async (req, res) => {
   }
 };
 
+
+
+export const addUsersController = async (req, res) => {
+  const { roomId, userIds } = req.body;
+
+  try {
+    const room = await chatRoomService.addUserInChatRoom(roomId, userIds);
+    res.status(200).json({ room });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+export const removeUsersController = async (req, res) => {
+  const { roomId, userIds } = req.body;
+
+  try {
+    const room = await chatRoomService.removeUserInChatRoom(roomId, userIds);
+    res.status(200).json({ room });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+

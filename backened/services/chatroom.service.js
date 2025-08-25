@@ -20,3 +20,31 @@ export const createChatRoom = async function (name, userIds) {
     console.log(error);
   }
 };
+
+
+export const addUserInChatRoom = async function(roomId,userIds){
+   const addUser = await prisma.room.update({
+    where:{id:roomId},
+    data:{
+      users:{
+        connect:userIds.map((id)=>({id}))
+      }
+
+    },
+    include: { users: true }
+   })
+   return addUser
+}
+export const removeUserInChatRoom = async function(roomId,userIds){
+   const removeUser = await prisma.room.update({
+    where:{id:roomId},
+    data:{
+      users:{
+        disconnect:userIds.map((id)=>({id}))
+      }
+
+    },
+    include: { users: true }
+   })
+   return removeUser
+}
