@@ -1,19 +1,24 @@
 import axios from "../config/axios.js"
 import { useState } from "react"
+import { useDispatch } from "react-redux"
 import { Link, useNavigate } from "react-router-dom"
+import { addSignupUser } from "../utils/signupSlice.js"
 
 const Signup = ()=>{
     const[username, setUsername] = useState('')
     const[email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
+    const dispatch = useDispatch()
     const naviagte = useNavigate()
 
     function submitahandler(e){
         e.preventDefault()
        axios.post('/user/create', {username, email, password}).then((res)=>{
         console.log(res.data)
+
         localStorage.setItem('token', res.data.token)
+        dispatch(addSignupUser(res.data))
         // setUser(res.data)/
         naviagte('/')
        })

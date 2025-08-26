@@ -8,7 +8,7 @@ export const hashPassword = async function(password){
 export const generateJWT = async function (user) {
     return jwt.sign({id:user.id, email:user.email},
         process.env.JWT_SECRET,
-        {expiresIn:"1h"}
+        {expiresIn:"1d"}
     )
 } 
 
