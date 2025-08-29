@@ -13,17 +13,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 // Users table
 model User {
-  id        Int       @id @default(autoincrement())
-  username  String    @unique
-  email     String    @unique
+  id        Int        @id @default(autoincrement())
+  username  String     @unique
+  email     String     @unique
   password  String
   messages  Message[] // One-to-Many: user can send many messages
-  rooms     Room[]    @relation("UserRooms" ) // Many-to-Many: user can join many rooms
+  rooms     Room[]     @relation("UserRooms") // Many-to-Many: user can join many rooms
   reactions Reaction[] // One-to-Many: reactions by the user
-  createdAt DateTime  @default(now())
+  createdAt DateTime   @default(now())
+  friendsAdded   Friend[] @relation("UserFriends")     // friends you added
+  friendsReceived Friend[] @relation("FriendOfUser")   // friends who added you
+ 
 }
 
 // Chat Rooms table
@@ -35,25 +37,39 @@ model Room {
   createdAt DateTime  @default(now())
 }
 
+model Friend {
+  userId    Int
+  friendId  Int
+  createdAt DateTime @default(now())
+
+  // Relation to the user who sent the friend request
+  user User @relation("UserFriends", fields: [userId], references: [id])
+
+  // Relation to the user who is being added
+  friend User @relation("FriendOfUser", fields: [friendId], references: [id])
+
+  @@id([userId, friendId]) // composite primary key
+}
+
 // Messages table
 model Message {
-  id        Int       @id @default(autoincrement())
+  id        Int        @id @default(autoincrement())
   content   String
   userId    Int
   roomId    Int
-  user      User      @relation(fields: [userId], references: [id])
-  room      Room      @relation(fields: [roomId], references: [id])
+  user      User       @relation(fields: [userId], references: [id])
+  room      Room       @relation(fields: [roomId], references: [id])
   reactions Reaction[] // One-to-Many: message can have many reactions
-  createdAt DateTime  @default(now())
+  createdAt DateTime   @default(now())
 }
 
 // Reactions table (e.g., 👍, ❤️)
 model Reaction {
-  id        Int       @id @default(autoincrement())
-  type      String    // e.g., "like", "love", "haha"
+  id        Int      @id @default(autoincrement())
+  type      String // e.g., "like", "love", "haha"
   userId    Int
   messageId Int
-  user      User      @relation(fields: [userId], references: [id])
-  message   Message   @relation(fields: [messageId], references: [id])
-  createdAt DateTime  @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  message   Message  @relation(fields: [messageId], references: [id])
+  createdAt DateTime @default(now())
 }

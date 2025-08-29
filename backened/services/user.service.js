@@ -23,3 +23,49 @@ export const loginUser = async function({email, password}){
     }
     
 }
+
+
+export const searchUsers = async (username) => {
+
+
+    if (!username) {
+      return res.status(400).json({ error: "Username query is required" });
+    }
+
+    const users = await prisma.user.findMany({
+      where: {
+        username: {
+          contains: username,  
+          mode: "insensitive",  
+        },
+      },
+      select: {
+        id: true,
+        username: true,
+      },
+      take: 10, 
+    });
+
+    
+  return users;
+
+}
+
+export const addUser = async(userId, friendId)=>{
+   const newFriend = await prisma.friend.create({
+      data: {
+        userId,
+        friendId,
+      },
+    });
+
+    return newFriend;
+}
+
+export const fetchUser = async (userId)=>{
+  const fetchFriends = await prisma.friend.findMany({
+  where: { userId },
+  include: { friend: { select: { id: true, username: true } } }
+});
+return fetchFriends;
+}

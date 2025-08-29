@@ -35,6 +35,7 @@ export const addUserInChatRoom = async function(roomId,userIds){
    })
    return addUser
 }
+
 export const removeUserInChatRoom = async function(roomId,userIds){
    const removeUser = await prisma.room.update({
     where:{id:roomId},

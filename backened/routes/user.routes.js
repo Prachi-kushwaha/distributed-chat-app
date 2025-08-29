@@ -10,5 +10,8 @@ router.post('/create',userValidator.createUserValidator, validate, userControlle
 router.post('/login',userValidator.loginValidator, validate, userController.loginController )
 router.get('/logout', userController.logoutController)
 router.get('/profile', authMiddleware, userController.getProfile)
+router.get('/search', userValidator.searchUserValidator, validate, userController.searchUser)
+router.post('/adduser',authMiddleware, validate, userController.addUserController)
+router.get('/fetchuser', authMiddleware, validate, userController.fetchUserController)
 
 export default router
