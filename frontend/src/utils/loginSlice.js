@@ -1,16 +1,26 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+
+const savedLogin = localStorage.getItem("login")
+  ? JSON.parse(localStorage.getItem("login"))
+  : null;
+
 const loginSlice = createSlice({
-    name:"loginSlice",
-    initialState:null,
-    reducers:{
-        addLogin:(state, action)=>{
-          return action.payload
-        },
-        removeLogin:()=>null
-    }
-})
+  name: "loginSlice",
+  initialState: savedLogin, 
+  reducers: {
+    addLogin: (state, action) => {
+     
+      localStorage.setItem("login", JSON.stringify(action.payload)); 
+      return action.payload;
+    },
+    removeLogin: () => {
+      localStorage.removeItem("login"); 
+      return null;
+    },
+  },
+});
 
-export const {addLogin, removeLogin} = loginSlice.actions
+export const { addLogin, removeLogin } = loginSlice.actions;
 
-export default loginSlice.reducer
+export default loginSlice.reducer;

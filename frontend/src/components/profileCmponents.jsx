@@ -2,8 +2,16 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 
 const ProfileComponents = ({ onClose }) => {
-    const userData = useSelector(store => store.login)
-    console.log(userData)
+    const getProfile = useSelector(store => store.profile)
+    console.log(getProfile)
+
+const dateStr = getProfile.createdAt
+const date = new Date(dateStr);
+    
+const formatteddate= date.toLocaleDateString("en-US", {
+  day: "numeric",
+  month: "long"
+});
 
     return (
         <div className="absolute top-0 left-0 h-1/3 rounded-md w-[20vw] bg-gray-200 shadow-lg flex flex-col p-4 animate-slideIn">
@@ -18,8 +26,10 @@ const ProfileComponents = ({ onClose }) => {
             {/* Profile Info */}
             <div className="flex flex-col gap-2">
                
-                <h1 className="text-xl font-semibold">{userData?.user?.username}</h1>
-                <p className="text-gray-700">{userData?.user?.email}</p>
+                <h1 className="text-xl font-semibold">{getProfile?.username}</h1>
+                <p className="text-gray-700">{getProfile?.email}</p>
+                <p className="text-gray-700">{formatteddate}</p>
+               
             </div>
         </div>
     )

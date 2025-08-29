@@ -31,6 +31,7 @@ export const loginController = async function(req, res){
       return res.status(401).json({ message: "Invalid password" });
     }
     const token = await authService.generateJWT(user)
+    delete user._doc.password;
     console.log(req.headers.authorization)
 
     // console.log(token)

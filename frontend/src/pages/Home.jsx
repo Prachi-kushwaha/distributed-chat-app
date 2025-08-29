@@ -6,16 +6,16 @@ import AddUserComponent from '../components/addUserComponent'
 import { addContact } from '../utils/addFriends'
 import axios from '../config/axios.js'
 import { initializeSocket } from '../config/socket.js'
-
+import { getProfile } from '../utils/getProfileSlice.js'
 
 
 const Home = () => {
   const [showProfile, setShowProfile] = useState(false)
   const [showAddUser, setShowAddUser] = useState(false)
   const dispatch = useDispatch()
-  const userData = useSelector(store => store.login)
   const friendsData = useSelector(store => store.addfriend)
   console.log(friendsData)
+   const getProfileUser = useSelector(store => store.profile)
 
   useEffect(() => {
     initializeSocket()
@@ -34,7 +34,24 @@ const Home = () => {
         });
       })
       .catch((err) => console.log(err.response?.data || err.message));
+
+
+    axios.get("/user/profile", {
+      headers: {
+        Authorization: `bearer ${localStorage.getItem("token")}`
+      }
+    })
+      .then((res) => {
+        console.log("Profile:", res.data);
+        dispatch(getProfile(res.data))
+      })
+      .catch((error) => {
+        console.log("Profile error:", error.response?.data || error.message);
+      });
+
+
   }, [dispatch]);
+
 
 
   return (
@@ -45,7 +62,7 @@ const Home = () => {
         <div className="flex flex-col items-center gap-6 mt-4">
 
           <div onClick={() => setShowProfile(true)} className="w-16 h-16 bg-indigo-600 rounded-full flex items-center justify-center text-white text-xl font-bold">
-            {userData?.user?.username?.[0]}
+            {getProfileUser?.username?.[0]}
           </div>
 
 

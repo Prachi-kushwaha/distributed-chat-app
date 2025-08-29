@@ -2,13 +2,15 @@ import { configureStore } from "@reduxjs/toolkit";
 import signupReducer from "./signupSlice.js"
 import loginReducer from "./loginSlice.js"
 import addFriendReducer from "./addFriends.js"
+import getProfileReducer from "./getProfileSlice.js"
 
 
 const appStore = configureStore({
     reducer:{
         signup:signupReducer,
         login:loginReducer,
-        addfriend:addFriendReducer
+        addfriend:addFriendReducer,
+        profile:getProfileReducer
     }
    
 })

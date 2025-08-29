@@ -17,12 +17,12 @@ export const createUser = async ({username, email, password})=>{
     return user
 }
 
-export const loginUser = async function({email, password}){
-    if(!email || !password){
-        throw new error("email and password is required")
-    }
+// export const loginUser = async function({email, password}){
+//     if(!email || !password){
+//         throw new error("email and password is required")
+//     }
     
-}
+// }
 
 
 export const searchUsers = async (username) => {
