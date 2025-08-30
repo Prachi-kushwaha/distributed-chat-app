@@ -1,14 +1,16 @@
-import React from 'react'
-import { useNavigate, Outlet } from 'react-router-dom'
+// import React from 'react'
+// import { Outlet, Navigate } from 'react-router-dom'
+//   // install with: npm install jwt-decode
 
-const Protectedroute = () => {
-    const navigate = useNavigate()
-    const token = localStorage.getItem('token')
-    if(!token){
-       return navigate('/login')
-    }
-    return <Outlet />;
-  
-}
+// const Protectedroute = () => {
+//   const token = localStorage.getItem('token')
 
-export default Protectedroute
+//   if (!token) {
+//     return <Navigate to="/login" replace />
+//   }
+
+
+//   return <Outlet />
+// }
+
+// export default Protectedroute

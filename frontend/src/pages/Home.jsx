@@ -5,17 +5,19 @@ import { useDispatch, useSelector } from 'react-redux'
 import AddUserComponent from '../components/addUserComponent'
 import { addContact } from '../utils/addFriends'
 import axios from '../config/axios.js'
-import { initializeSocket } from '../config/socket.js'
+import { initializeSocket, receiveMessage, sendMessage } from '../config/socket.js'
 import { getProfile } from '../utils/getProfileSlice.js'
+import GroupUserComponents from '../components/groupUserComponents.jsx'
 
 
 const Home = () => {
   const [showProfile, setShowProfile] = useState(false)
   const [showAddUser, setShowAddUser] = useState(false)
+  const [addUserInGroup, setAddUserInGroup] = useState(false)
   const dispatch = useDispatch()
   const friendsData = useSelector(store => store.addfriend)
   console.log(friendsData)
-   const getProfileUser = useSelector(store => store.profile)
+  const getProfileUser = useSelector(store => store.profile)
 
   useEffect(() => {
     initializeSocket()
@@ -67,7 +69,7 @@ const Home = () => {
 
 
           <i onClick={() => setShowAddUser(true)} className="ri-user-add-fill text-2xl cursor-pointer hover:text-indigo-500 transition"></i>
-          <i className="ri-group-3-fill text-2xl cursor-pointer hover:text-indigo-500 transition"></i>
+          <i onClick={() => setAddUserInGroup(true)} className="ri-group-3-fill text-2xl cursor-pointer hover:text-indigo-500 transition"></i>
           <i className="ri-chat-1-fill text-2xl cursor-pointer hover:text-indigo-500 transition"></i>
         </div>
 
@@ -147,6 +149,11 @@ const Home = () => {
       {showAddUser && (
         <AddUserComponent onClose={() => setShowAddUser(false)} />
       )}
+      {
+        addUserInGroup && (
+          <GroupUserComponents onClose={() => setAddUserInGroup(false)} />
+        )
+      }
     </main>
 
 

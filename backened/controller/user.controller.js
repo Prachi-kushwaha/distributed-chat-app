@@ -30,12 +30,14 @@ export const loginController = async function(req, res){
     if(!isMatch){
       return res.status(401).json({ message: "Invalid password" });
     }
-    const token = await authService.generateJWT(user)
-    delete user._doc.password;
-    console.log(req.headers.authorization)
+   const { password: _, ...userWithoutPassword } = user;  // destructure password out
+
+const token = await authService.generateJWT(user);
+
+res.status(201).json({ user: userWithoutPassword, token });
 
     // console.log(token)
-    res.status(201).json({user, token})
+    // res.status(201).json({user, token})
     // console.log(req.headers.authorization)
   } catch (error) {
     console.error("Login error:", error);
